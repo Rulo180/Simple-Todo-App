@@ -11,6 +11,7 @@ import './task.js';
 
 Template.body.onCreated(function bodyOnCreated() {
   this.state = new ReactiveDict();
+  Meteor.subscribe('tasks');
 });
 
 Template.body.helpers({       //Definimos un helper en el template body
@@ -38,12 +39,7 @@ Template.body.events({
     const text = target.text.value;   //Almacena el valor del input en text
 
     //Insert a taks into the Collection
-    Tasks.insert({
-      text,
-      createdAt: new Date(),                //current time
-      owner: Meteor.userId(),               //devuelve el _id del usuario actual
-      username: Meteor.user().username,     //devuelve el documento user completo
-    });
+    Meteor.call('tasks.insert', text);
 
     //Clear form
     target.text.value = '';
